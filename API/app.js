@@ -1,16 +1,20 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import mysql from "mysql2/promise"
 
-dotenv.config();
+import { connectDB } from "./config/mongodb.js";
+import { connectMySQL } from "./config/sql.js";
+
+import cityRoute from "./routes/city.js";
+import userRoute from "./routes/user.js";
+import { userTable } from "./model/user.sql.js";
 
 const app = express();
 dotenv.config();
-
-const port = process.env.PORT || 3000;
+connectDB();
+await connectMySQL()
+ await userTable()
 app.use(
     cors({
         credentials: true,
@@ -26,37 +30,10 @@ app.use(express.json());
 app.get('/', (req, res, next) => {
     res.send('<h1>API MASTER</h1>')
 })
+app.use('/api/city', cityRoute);
+app.use('/api/user', userRoute);
 
-const connectDB = () => {
-    try {
-        mongoose.connect(process.env.URI)
-        console.log("Connecting Database...");
-    } catch (error) {
-        console.log("Error....");
-        console.log(error);
-    }
-};
-
-mongoose.connection.on("connected", () => {
-    console.log("Database Connection Successful...");
-})
-mongoose.connection.on("disconnected", () => {
-    console.log("Database Connection Failed...");
-})
-process.on('SIGINT', async () => {
-    await mongoose.connection.close();
-    process.exit(0)
-})
-mongoose.set("strictQuery", true);
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
     connectDB();
-    console.log(`Listening at ${port}`);
+    console.log(`Listening at ${process.env.PORT || 5000}`);
 });
-
-const db = await mysql.createConnection({
-    host: "localhost",
-    user: "",
-    password: "",
-    database:""
-
-})

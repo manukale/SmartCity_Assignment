@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const citySchema = new mongoose.Schema({
-    name: String,
-    // population: Number
+    city_name: String,
+    population: Number
 });
 
 export default mongoose.model("City", citySchema);
