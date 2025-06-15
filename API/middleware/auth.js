@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 const auth = (req, res, next) => {
- const token = req.cookies.access_token; 
+ const token = req.cookies.token; 
  
   if (!token) return res.status(403).json({ message: 'Token required' });
 
