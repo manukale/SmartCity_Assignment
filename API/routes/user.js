@@ -1,6 +1,5 @@
 import express from 'express'
 import { addUser, deleteUser, getUser, loginUser, updateUser } from '../controller/user.js'
-import { get } from 'mongoose'
 import auth from '../middleware/auth.js'
 
 const router = express.Router()
